@@ -1,15 +1,15 @@
 public class Addition extends Function{
-    private int left;
-    private int right;
+    private Variable left;
+    private Variable right;
 
     public Addition() {
-        this.left = 0;
-        this.right = 0;
+        this.left = new Variable(0);
+        this.right = new Variable(0);
     }
 
     public Addition(int _left, int _right) {
-        this.left = _left;
-        this.right = _right;
+        this.left = new Variable(_left);
+        this.right = new Variable(_right);
     }
 
     public boolean isConfluent() {
@@ -17,10 +17,17 @@ public class Addition extends Function{
     }
 
     public void swapValues() {
-        int temp = this.left;
-        this.left = this.right;
-        this.right = temp;
+        String tempLabel = this.left.getLabel();
+        double tempConstant = this.left.getConstant();
+        double tempExponent = this.left.getExponent();
 
+        this.left.setLabel(this.right.getLabel());
+        this.left.setConstant(this.right.getConstant());
+        this.left.setExponent(this.right.getExponent());
+
+        this.right.setLabel(tempLabel);
+        this.right.setConstant(tempConstant);
+        this.right.setExponent(tempExponent);
     }
 
     public String toString() {
