@@ -12,8 +12,25 @@ public class Addition extends Function{
         this.right = _right;
     }
 
+    public boolean isConfluent() {
+        return true;
+    }
+
+    public void swapValues() {
+        int temp = this.left;
+        this.left = this.right;
+        this.right = temp;
+
+    }
+
+    public String toString() {
+        return this.left + " + " + this.right;
+    }
+
     @Override
     public void print() {
-        System.out.println(this.left + " + " + this.right);
+        System.out.println(this.toString());
     }
+
+
 }
