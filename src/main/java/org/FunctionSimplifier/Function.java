@@ -1,3 +1,5 @@
+package org.FunctionSimplifier;
+
 import java.util.List;
 
 public class Function {

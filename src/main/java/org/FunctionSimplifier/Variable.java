@@ -1,3 +1,5 @@
+package org.FunctionSimplifier;
+
 public class Variable {
     private String label;
     private double constant;
@@ -30,13 +32,17 @@ public class Variable {
     public double evaluate(double value) {
         return this.constant * (Math.pow(value, this.exponent));
     }
+    public double evaluate() { return (int) Math.pow(this.constant, this.exponent); }
 
     public String toString() {
         String variableString = this.label;
-        if (this.constant != 1)
-            variableString = this.constant + variableString;
-        if (this.exponent != 1)
-            variableString = variableString + "^" + this.exponent;
+        if (this.constant != 1) {
+            variableString = checkDecimal(this.constant) + variableString;
+        }
+        if (this.exponent != 1) {
+            variableString = variableString + "^" + checkDecimal(this.exponent);
+        }
+
         return variableString;
     }
 
@@ -62,5 +68,10 @@ public class Variable {
 
     public void setExponent(double exponent) {
         this.exponent = exponent;
+    }
+
+    private String checkDecimal(double value) {
+        String valueStr = Double.toString(value);
+        return (valueStr.endsWith(".0")) ? valueStr.replace(".0", "") : valueStr;
     }
 }
