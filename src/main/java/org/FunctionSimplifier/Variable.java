@@ -36,9 +36,12 @@ public class Variable {
 
     public String toString() {
         String variableString = this.label;
-        if (this.constant != 1) {
+        if (this.constant == -1) {
+            variableString = "-" + variableString;
+        } else if (this.constant != 1) {
             variableString = checkDecimal(this.constant) + variableString;
         }
+
         if (this.exponent != 1) {
             variableString = variableString + "^" + checkDecimal(this.exponent);
         }
