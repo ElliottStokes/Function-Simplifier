@@ -61,16 +61,20 @@ public class Multiplication extends Function implements Commutation, Distributiv
     }
 
     public Variable evaluate() {
+        // When the variables are only constant variables
         if (this.left.getLabel().equals("") && this.right.getLabel().equals(""))
-            return new Variable(this.left.getConstant() * this.right.getConstant());
+            return new Variable(this.left.evaluate() * this.right.evaluate());
+        // When the variables include the same labels
         else if (this.left.getLabel().equals(this.right.getLabel()))
             return new Variable(this.left.getLabel(),
                     this.left.getConstant() * this.right.getConstant(),
                     this.left.getExponent() + this.right.getExponent());
+        // When the left side of the operation includes a label but the other is constant
         else if (this.left.getLabel().equals("")) {
             this.right.setConstant(this.right.getConstant() * this.left.getConstant());
             return this.right;
         }
+        // When the right side of the operation includes a label but the other is constant
         else {
             this.left.setConstant(this.left.getConstant() * this.right.getConstant());
             return this.left;
