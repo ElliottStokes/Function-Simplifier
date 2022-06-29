@@ -1,6 +1,5 @@
 package BasicArithmeticTests;
 
-import org.FunctionSimplifier.BasicArithmetic.Addition;
 import org.FunctionSimplifier.BasicArithmetic.Multiplication;
 import org.FunctionSimplifier.Variable;
 import org.junit.jupiter.api.Assertions;
@@ -31,9 +30,9 @@ public class MultiplicationTests {
         Variable varX = new Variable("x");
         Variable varY = new Variable("y");
         Multiplication multi_XY = new Multiplication(varX, varY);
-        Assertions.assertEquals("xy", multi_XY.toString());
+        Assertions.assertEquals("x * y", multi_XY.toString());
         multi_XY.applyCommutation();
-        Assertions.assertEquals("yx", multi_XY.toString());
+        Assertions.assertEquals("y * x", multi_XY.toString());
     }
 
     @Test
