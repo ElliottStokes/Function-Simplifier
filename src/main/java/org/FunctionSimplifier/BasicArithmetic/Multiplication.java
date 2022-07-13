@@ -5,7 +5,7 @@ import org.FunctionSimplifier.Rules.Commutation;
 import org.FunctionSimplifier.Rules.Distributive;
 import org.FunctionSimplifier.Variable;
 
-public class Multiplication extends Function implements Commutation, Distributive {
+public class Multiplication extends Function implements Arithmetic, Commutation, Distributive {
     private Function left;
     private Function right;
 
@@ -44,6 +44,26 @@ public class Multiplication extends Function implements Commutation, Distributiv
         this.right = new Function(_right);
     }
 
+    public Multiplication(Function _left, Function _right) {
+        this.left = _left;
+        this.right = _right;
+    }
+
+    public Multiplication(Multiplication _left, Multiplication _right) {
+        this.left = new Function(_left);
+        this.right = new Function(_right);
+    }
+
+    public Multiplication(Multiplication _left, Function _right) {
+        this.left = new Function(_left);
+        this.right = _right;
+    }
+
+    public Multiplication(Function _left, Multiplication _right) {
+        this.left = _left;
+        this.right = new Function(_right);
+    }
+
     public String toString() {
         return this.left.toString() + " * " + this.right.toString();
     }
@@ -60,31 +80,46 @@ public class Multiplication extends Function implements Commutation, Distributiv
 
     }
 
-    public Variable evaluate() {
-        if (this.left.isVariable() && this.right.isVariable()) {
-            Variable left = (Variable) this.left.getBody();
-            Variable right = (Variable) this.right.getBody();
+    public Function evaluate() {
+        Function newLeft = this.left.evaluate();
+        Function newRight = this.right.evaluate();
+        if (newLeft.isVariable() && newRight.isVariable()) {
+            Variable left = (Variable) newLeft.getBody();
+            Variable right = (Variable) newRight.getBody();
             // When the variables are only constant variables
             if (!left.hasLabel() && !right.hasLabel())
-                return new Variable(left.evaluate() * right.evaluate());
+                return new Function(left.evaluate() * right.evaluate());
                 // When the variables include the same labels
             else if (left.getLabel().equals(right.getLabel()))
-                return new Variable(left.getLabel(),
+                return new Function(new Variable(left.getLabel(),
                         left.getConstant() * right.getConstant(),
-                        left.getExponent() + right.getExponent());
+                        left.getExponent() + right.getExponent()));
                 // When the left side of the operation includes a label but the other is constant
             else if (!left.hasLabel()) {
                 right.setConstant(right.getConstant() * left.getConstant());
-                return right;
+                return new Function(right);
             }
             // When the right side of the operation includes a label but the other is constant
-            else {
+            else if (!right.hasLabel()) {
                 left.setConstant(left.getConstant() * right.getConstant());
-                return left;
+                return new Function(left);
+            } else {
+                return new Function(new Multiplication(newLeft, newRight));
             }
+        } else if (newLeft.isVariable()){
+            newLeft = new Multiplication(newLeft, newRight.getLeftVariable());
+            newRight = newRight.getRightFunction();
+        } else if (newRight.isVariable()) {
+            newLeft = newLeft.getLeftFunction();
+            newRight = new Multiplication(newLeft.getLeftVariable(), newRight);
         } else {
-            return new Variable(0);
+            newLeft = newLeft.evaluate();
+            newRight = newRight.evaluate();
         }
+        if (newLeft.toString().equals(this.left.toString()) && newRight.toString().equals(this.right.toString()))
+            return new Function(new Multiplication(newLeft, newRight));
+        else
+            return new Multiplication(newLeft, newRight).evaluate();
     }
 
     public Variable evaluate(int leftValue, int rightValue) {
@@ -95,5 +130,13 @@ public class Multiplication extends Function implements Commutation, Distributiv
         } else {
             return new Variable(0 );
         }
+    }
+
+    public Function getRight() {
+        return this.right;
+    }
+
+    public Function getLeft() {
+        return this.left;
     }
 }
