@@ -1,6 +1,7 @@
 package BasicArithmeticTests;
 
 import org.FunctionSimplifier.BasicArithmetic.Division;
+import org.FunctionSimplifier.Function;
 import org.FunctionSimplifier.Variable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,11 @@ public class DivisionTests {
     @Test
     void divisionEvaluate() {
         Division div = new Division(125, 5);
-        Variable divResult = div.evaluate();
+        Function divResult = div.evaluate();
         Assertions.assertEquals("25", divResult.toString());
 
         Division divDecimals = new Division(17.5, 1.25);
-        Variable divDecimalsResult = divDecimals.evaluate();
+        Function divDecimalsResult = divDecimals.evaluate();
         Assertions.assertEquals("14", divDecimalsResult.toString());
 
         Division div_XY = new Division(new Variable("x"), new Variable("y"));
@@ -39,11 +40,11 @@ public class DivisionTests {
         Assertions.assertEquals("4.5", divExponentialResult.toString());
 
         Division divSameLabel = new Division(new Variable("x", 10, 4), new Variable("x", 5, 2));
-        Variable divSameLabelResult = divSameLabel.evaluate();
+        Function divSameLabelResult = divSameLabel.evaluate();
         Assertions.assertEquals("2x^2", divSameLabelResult.toString());
 
         Division divSameLabelSameExp = new Division(new Variable("x", 9, 1), new Variable("x", 3, 1));
-        Variable divSameLabelSameExpResult = divSameLabelSameExp.evaluate();
+        Function divSameLabelSameExpResult = divSameLabelSameExp.evaluate();
         Assertions.assertEquals("3", divSameLabelSameExpResult.toString());
     }
 }

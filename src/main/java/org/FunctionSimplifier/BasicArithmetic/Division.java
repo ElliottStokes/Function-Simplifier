@@ -26,18 +26,18 @@ public class Division extends Function {
         return this.left + " / " + this.right;
     }
 
-    public Variable evaluate() {
+    public Function evaluate() {
         if (this.left.hasLabel() && this.left.getLabel().equals(this.right.getLabel())) {
             double exponentValue = this.left.getExponent() - this.right.getExponent();
             double constantValue = this.left.getConstant() / this.right.getConstant();
 
             if (exponentValue == 0) {
-                return new Variable(constantValue);
+                return new Function(constantValue);
             } else {
-                return new Variable(this.left.getLabel(), constantValue, exponentValue);
+                return new Function(new Variable(this.left.getLabel(), constantValue, exponentValue));
             }
         } else {
-            return new Variable(this.left.evaluate() / this.right.evaluate());
+            return new Function(this.left.evaluate() / this.right.evaluate());
         }
     }
 

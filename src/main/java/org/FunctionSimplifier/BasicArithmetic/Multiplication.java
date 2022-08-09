@@ -24,6 +24,11 @@ public class Multiplication extends Function implements Arithmetic, Commutation,
         this.right = new Function(_right);
     }
 
+    public Multiplication(Function _left, Function _right) {
+        this.left = _left;
+        this.right = _right;
+    }
+
     public Multiplication(int _left, Variable _right) {
         this.left = new Function(_left);
         this.right = new Function(_right);
@@ -42,11 +47,6 @@ public class Multiplication extends Function implements Arithmetic, Commutation,
     public Multiplication(Variable _left, double _right) {
         this.left = new Function(_left);
         this.right = new Function(_right);
-    }
-
-    public Multiplication(Function _left, Function _right) {
-        this.left = _left;
-        this.right = _right;
     }
 
     public Multiplication(Multiplication _left, Multiplication _right) {

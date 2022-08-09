@@ -1,5 +1,6 @@
 package BasicArithmeticTests;
 
+import org.FunctionSimplifier.BasicArithmetic.Addition;
 import org.FunctionSimplifier.BasicArithmetic.Multiplication;
 import org.FunctionSimplifier.Function;
 import org.FunctionSimplifier.Variable;
