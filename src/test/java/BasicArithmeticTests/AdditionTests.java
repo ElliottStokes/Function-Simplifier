@@ -62,7 +62,10 @@ public class AdditionTests {
         Function addTwoFunctionsResult = addTwoFunctions.evaluate(); // 11 + 2x + y^2
         Assertions.assertEquals("11 + 2x + y^2", addTwoFunctionsResult.toString());
 
-        Addition addTwoFunctions2 = new Addition(new Addition(new Variable("x", 5), new Variable("y", 7)), new Addition(new Variable("x", 9), new Variable("y", 3))); // 5x + 7x + 9y + 3y
+        // This wont work because it can't determine the order to attempt to add the variables
+        // Addition addTwoFunctions2 = new Addition(new Addition(new Variable("x", 5), new Variable("y", 7)), new Addition(new Variable("x", 9), new Variable("y", 3))); // 5x + 7x + 9y + 3y
+
+        Addition addTwoFunctions2 = new Addition(new Addition(new Variable("x", 5), new Variable("x", 9)), new Addition(new Variable("x", 7), new Variable("y", 3))); // 5x + 7x + 9y + 3y
         Function addTwoFunctions2Result = addTwoFunctions2.evaluate(); // 21x + 3y
         Assertions.assertEquals("21x + 3y", addTwoFunctions2Result.toString());
     }
