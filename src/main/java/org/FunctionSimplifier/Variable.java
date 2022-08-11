@@ -32,7 +32,7 @@ public class Variable {
     public double evaluate(double value) {
         return this.constant * (Math.pow(value, this.exponent));
     }
-    public double evaluate() { return (int) Math.pow(this.constant, this.exponent); }
+    public double evaluate() { return Math.pow(this.constant, this.exponent); }
 
     public String toString() {
         String variableString = this.label;
@@ -76,5 +76,9 @@ public class Variable {
     private String checkDecimal(double value) {
         String valueStr = Double.toString(value);
         return (valueStr.endsWith(".0")) ? valueStr.replace(".0", "") : valueStr;
+    }
+
+    public boolean hasLabel() {
+        return !this.label.equals("");
     }
 }

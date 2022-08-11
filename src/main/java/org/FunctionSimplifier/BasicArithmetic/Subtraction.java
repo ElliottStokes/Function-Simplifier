@@ -29,13 +29,13 @@ public class Subtraction extends Function {
 
     public String toString() { return this.left + " - " + this.right; }
 
-    public Variable evaluate() {
+    public Function evaluate() {
         if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent()) {
-            return new Variable(this.left.getLabel(),
+            return new Function(new Variable(this.left.getLabel(),
                     this.left.getConstant() - this.right.getConstant(),
-                    this.left.getExponent());
+                    this.left.getExponent()));
         } else {
-            return new Variable(this.left.evaluate() - this.right.evaluate());
+            return new Function(this.left.evaluate() - this.right.evaluate());
         }
     }
 

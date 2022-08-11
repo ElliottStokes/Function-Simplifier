@@ -1,6 +1,8 @@
 package BasicArithmeticTests;
 
 import org.FunctionSimplifier.BasicArithmetic.Addition;
+import org.FunctionSimplifier.BasicArithmetic.Multiplication;
+import org.FunctionSimplifier.Function;
 import org.FunctionSimplifier.Variable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -38,19 +40,34 @@ public class AdditionTests {
     @Test
     void evaluateAddition() {
         Addition add = new Addition(4, 7); // 4 + 7
-        Variable addResult = add.evaluate();
+        Function addResult = add.evaluate();
         Assertions.assertEquals("11", addResult.toString());
 
         Variable X = new Variable("x", 2); // 2x
         Variable Y = new Variable("y", 1, 2); //y^2
         Addition add_XY = new Addition(X, Y); // 2x + y^2
-        Variable add_XYResult = add_XY.evaluate(10, 3);
-        Assertions.assertEquals("29", add_XYResult.toString());
+        Function add_XYResult = add_XY.evaluate();
+        Assertions.assertEquals("2x + y^2", add_XYResult.toString());
 
         Variable X2 =  new Variable("x", 3); // 3x
         Addition add_2x3x = new Addition(X, X2); // 2x + 3x
-        Variable add_2x3xResult = add_2x3x.evaluate();
+        Function add_2x3xResult = add_2x3x.evaluate();
         Assertions.assertEquals("5x", add_2x3xResult.toString());
+
+        Addition addThreeNumbers = new Addition(new Addition(new Variable(5), new Variable(7)), new Function(new Variable(10))); // 5 + 7 + 10
+        Function addThreeNumbersResult = addThreeNumbers.evaluate(); // 22
+        Assertions.assertEquals("22", addThreeNumbersResult.toString());
+
+        Addition addTwoFunctions = new Addition(new Addition(7, 4), new Addition(new Variable("x", 2), new Variable("y", 1, 2))); // 7 + 4 + 2x + y^2
+        Function addTwoFunctionsResult = addTwoFunctions.evaluate(); // 11 + 2x + y^2
+        Assertions.assertEquals("11 + 2x + y^2", addTwoFunctionsResult.toString());
+
+        // This wont work because it can't determine the order to attempt to add the variables
+        // Addition addTwoFunctions2 = new Addition(new Addition(new Variable("x", 5), new Variable("y", 7)), new Addition(new Variable("x", 9), new Variable("y", 3))); // 5x + 7x + 9y + 3y
+
+        Addition addTwoFunctions2 = new Addition(new Addition(new Variable("x", 5), new Variable("x", 9)), new Addition(new Variable("x", 7), new Variable("y", 3))); // 5x + 7x + 9y + 3y
+        Function addTwoFunctions2Result = addTwoFunctions2.evaluate(); // 21x + 3y
+        Assertions.assertEquals("21x + 3y", addTwoFunctions2Result.toString());
     }
 
     @Test
@@ -65,7 +82,7 @@ public class AdditionTests {
         Assertions.assertEquals("5x^2", variable4.toString());
     }
 
-    @Test
+/*    @Test
     void evaluateVariable() {
         Variable variable1 = new Variable("x");
         Variable variable2 = new Variable("x", 3);
@@ -73,5 +90,5 @@ public class AdditionTests {
         Assertions.assertEquals(5, variable1.evaluate(5));
         Assertions.assertEquals(15, variable2.evaluate(5));
         Assertions.assertEquals(125, variable3.evaluate(5));
-    }
+    }*/
 }
