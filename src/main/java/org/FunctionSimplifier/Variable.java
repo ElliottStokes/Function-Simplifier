@@ -11,6 +11,12 @@ public class Variable {
         this.exponent = 1;
     }
 
+    public Variable(Character label) {
+        this.label = label.toString();
+        this.constant = 1;
+        this.exponent = 1;
+    }
+
     public Variable(double constant) {
         this.label = "";
         this.constant = constant;
