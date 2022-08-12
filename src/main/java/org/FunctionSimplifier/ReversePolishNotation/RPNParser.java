@@ -18,7 +18,7 @@ public class RPNParser {
         Operator operator;
 
         for (Character c : inputCharacters) {
-            if (this.operators.contains(c.toString())) {
+            if (this.isOperator(c)) {
                 if (c.equals('+'))
                     operator = new Add();
                 else if (c.equals('-'))
@@ -51,5 +51,9 @@ public class RPNParser {
             outputString.append(this.operatorStack.pop().toString());
 
         return outputString.toString();
+    }
+
+    public boolean isOperator(Character value) {
+        return this.operators.contains(value.toString());
     }
 }
