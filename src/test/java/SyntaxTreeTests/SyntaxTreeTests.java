@@ -32,6 +32,12 @@ public class SyntaxTreeTests {
         Assertions.assertEquals("xy+v-x/y*z-", tree3.depthFirstTraversal());
 
         SyntaxTree tree4 = new SyntaxTree("(x - y) / (z - m)");
-        Assertions.assertEquals("xy-m-z/", tree4.depthFirstTraversal());
+        Assertions.assertEquals("xy-zm-/", tree4.depthFirstTraversal());
+
+        SyntaxTree tree5 = new SyntaxTree("x+y+z-a*b");
+        Assertions.assertEquals("xy+z+ab*-", tree5.depthFirstTraversal());
+
+        SyntaxTree tree6 = new SyntaxTree("x-(y+z*(a/b^n))");
+        Assertions.assertEquals("xyzabn^/*+-", tree6.depthFirstTraversal());
     }
 }

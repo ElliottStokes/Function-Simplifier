@@ -21,9 +21,6 @@ public class SyntaxTree {
         this.orderOfOperations = new LinkedList<>();
         this.variables = new HashMap<>();
 
-        LeafNode leftNode, rightNode;
-        int operationIndex;
-
         for (Character c : this.reversePolishNotation.toCharArray())
             if (rpnParser.isOperator(c))
                 if (c.equals('+'))
@@ -40,25 +37,49 @@ public class SyntaxTree {
                 if (!this.variables.containsKey(c))
                     this.variables.put(c, new Variable(c));
 
-        StringBuilder rpnCopy = new StringBuilder(this.reversePolishNotation);
+        this.rootNode = createTree(this.reversePolishNotation);
+    }
+
+    private RootNode createTree(String rpnExpression) {
+        StringBuilder rpnCopy = new StringBuilder(rpnExpression);
+
+        LeafNode leftNode, rightNode;
+        BranchNode subTree;
+
+        int operationIndex = rpnCopy.indexOf(this.orderOfOperations.peek().toString());
+
+        rightNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-1)));
+        leftNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-2)));
+        RootNode treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
+        rpnCopy.delete(operationIndex-2, operationIndex+1);
+        operationIndex -= 2;
+
 
         while(!this.orderOfOperations.isEmpty()) {
             operationIndex = rpnCopy.indexOf(this.orderOfOperations.peek().toString());
             rightNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-1)));
 
-            if (this.rootNode == null) {
-                leftNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-2)));
-                this.rootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
-                rpnCopy.deleteCharAt(operationIndex);
-                rpnCopy.deleteCharAt(operationIndex-1);
-                rpnCopy.deleteCharAt(operationIndex-2);
+            if (operationIndex > 2 && !rpnParser.containsOperator(rpnCopy.substring(0, operationIndex))) {
+                while(!this.orderOfOperations.isEmpty()) {
+                    leftNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-1)));
+                    treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, treeRootNode);
+                    rpnCopy.delete(operationIndex-1, operationIndex+1);
+                    operationIndex -= 1;
+                }
+            }
+            else if (operationIndex >= 2 && !rpnParser.isOperator(rpnCopy.charAt(operationIndex-2))) {
+                subTree = new BranchNode(this.orderOfOperations.remove(), new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-2))), rightNode);
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), subTree);
+                rpnCopy.delete(operationIndex-2, operationIndex+1);
+                operationIndex -= 2;
             }
             else {
-                this.rootNode = new RootNode(this.orderOfOperations.remove(), this.rootNode.convertToBranch(), rightNode);
-                rpnCopy.deleteCharAt(operationIndex);
-                rpnCopy.deleteCharAt(operationIndex-1);
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightNode);
+                rpnCopy.delete(operationIndex-1, operationIndex+1);
+                operationIndex -= 1;
             }
         }
+        return treeRootNode;
     }
 
     public String depthFirstTraversal() {
@@ -70,13 +91,13 @@ public class SyntaxTree {
             return mainNode.toString();
         else
             return depthFirstTraversal_R(mainNode.getLeftNode())  + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode.toString();
-        /*if (mainNode instanceof RootNode)
-            return depthFirstTraversal_R(mainNode.getLeftNode()) + mainNode.toString() + depthFirstTraversal_R(mainNode.getRightNode());
-        else if (mainNode instanceof BranchNode)
-            return */
     }
 
     public RootNode getRootNode() {
         return this.rootNode;
+    }
+
+    public String getReversePolishNotation() {
+        return this.reversePolishNotation;
     }
 }
