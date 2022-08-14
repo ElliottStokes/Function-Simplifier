@@ -37,11 +37,15 @@ public class RPNParser {
             }
             else if (c.equals('(')) {
                 this.operatorStack.push(new OpenBracket());
+                //outputString.append(c);
             }
             else if (c.equals(')')) {
-                while (!(this.operatorStack.peek() instanceof OpenBracket))
-                    outputString.append(this.operatorStack.pop().toString());
-                this.operatorStack.pop();
+                if (!this.operatorStack.isEmpty()) {
+                    while (!(this.operatorStack.peek() instanceof OpenBracket))
+                        outputString.append(this.operatorStack.pop().toString());
+                    this.operatorStack.pop();
+                }
+                //outputString.append(c);
             }
             else
                 outputString.append(c);
@@ -55,5 +59,13 @@ public class RPNParser {
 
     public boolean isOperator(Character value) {
         return this.operators.contains(value.toString());
+    }
+
+    public boolean containsOperator(String values) {
+        for (int i = 0; i < values.length(); i++)
+            if (isOperator(values.charAt(i)))
+                return true;
+
+        return false;
     }
 }
