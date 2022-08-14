@@ -9,4 +9,8 @@ public class OpenBracket implements Operator {
     public int getPriority() {
         return this.PRIORITY;
     }
+
+    public String toString() {
+        return "(";
+    }
 }

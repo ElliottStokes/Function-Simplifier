@@ -9,4 +9,8 @@ public class CloseBracket implements Operator {
     public int getPriority() {
         return this.PRIORITY;
     }
+
+    public String toString() {
+        return ")";
+    }
 }
