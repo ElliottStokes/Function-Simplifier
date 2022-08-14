@@ -1,7 +1,7 @@
 package org.FunctionSimplifier.ReversePolishNotation.Operators;
 
 public class Subtract implements Operator {
-    private final int PRIORITY = 5;
+    private final int PRIORITY = 4;
 
     public Subtract() { }
 
