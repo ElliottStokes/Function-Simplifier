@@ -6,6 +6,13 @@ public class BranchNode implements Node {
     private Operator operator;
     private Node leftNode;
     private Node rightNode;
+    private int order;
+
+    public BranchNode() {
+        this.operator = null;
+        this.leftNode = null;
+        this.rightNode = null;
+    }
 
     public BranchNode(Operator _operator) {
         this.operator = _operator;

@@ -7,6 +7,11 @@ public class RootNode implements Node {
     private Node leftNode;
     private Node rightNode;
 
+    public RootNode() {
+        this.operator = null;
+        this.leftNode = null;
+        this.rightNode = null;
+    }
     public RootNode(Operator _operator) {
         this.operator = _operator;
         this.leftNode = null;
