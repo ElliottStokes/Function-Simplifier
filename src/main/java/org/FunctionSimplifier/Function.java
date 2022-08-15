@@ -59,27 +59,11 @@ public class Function {
             return new Function(0);
     }
 
-    public Function getRightVariable() {
-        Function subFunction = ((Arithmetic) this.body).getRight();
-        while (!subFunction.isVariable()) {
-            subFunction = ((Arithmetic) this.body).getRight();
-        }
-        return subFunction;
-    }
-
-    public Function getRightFunction() {
+    public Variable getRightVariable() {
         return ((Arithmetic) this.body).getRight();
     }
 
-    public Function getLeftVariable() {
-        Function subFunction = ((Arithmetic) this.body).getLeft();
-        while (!subFunction.isVariable()) {
-            subFunction = ((Arithmetic) this.body).getLeft();
-        }
-        return subFunction;
-    }
-
-    public Function getLeftFunction() {
+    public Variable getLeftVariable() {
         return ((Arithmetic) this.body).getLeft();
     }
 }

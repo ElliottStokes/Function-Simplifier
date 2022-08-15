@@ -3,7 +3,7 @@ package org.FunctionSimplifier.BasicArithmetic;
 import org.FunctionSimplifier.Function;
 import org.FunctionSimplifier.Variable;
 
-public class Subtraction extends Function {
+public class Subtraction extends Function implements Arithmetic {
     private Variable left;
     private Variable right;
 
@@ -27,6 +27,11 @@ public class Subtraction extends Function {
         this.right = _right;
     }
 
+    public Subtraction(String _left, String _right) {
+        this.left = new Variable(_left);
+        this.right = new Variable(_right);
+    }
+
     public String toString() { return this.left + " - " + this.right; }
 
     public Function evaluate() {
@@ -35,8 +40,28 @@ public class Subtraction extends Function {
                     this.left.getConstant() - this.right.getConstant(),
                     this.left.getExponent()));
         } else {
-            return new Function(this.left.evaluate() - this.right.evaluate());
+            return new Function(new Subtraction(this.left, this.right));
         }
+    }
+
+    @Override
+    public Variable getLeft() {
+        return this.left;
+    }
+
+    @Override
+    public void setLeft(String _left) {
+        this.left = new Variable(_left);
+    }
+
+    @Override
+    public Variable getRight() {
+        return this.right;
+    }
+
+    @Override
+    public void setRight(String _right) {
+        this.right = new Variable(_right);
     }
 
     public Variable evaluate(double leftValue, double rightValue) {

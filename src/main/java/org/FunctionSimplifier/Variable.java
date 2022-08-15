@@ -6,8 +6,22 @@ public class Variable {
     private double exponent;
 
     public Variable(String label) {
-        this.label = label;
-        this.constant = 1;
+        int labelIndex = 0;
+        for (int i = 0; i < label.length(); i++) {
+            if (isNumeric(String.valueOf(label.charAt(i))) || label.charAt(i) == '-')
+                labelIndex++;
+            else
+                break;
+        }
+
+        if (labelIndex > 0) {
+            this.label = label.substring(labelIndex);
+            this.constant = Double.parseDouble(label.substring(0, labelIndex));
+        } else {
+            this.label = label;
+            this.constant = 1;
+        }
+
         this.exponent = 1;
     }
 
@@ -35,8 +49,15 @@ public class Variable {
     public double evaluate() { return Math.pow(this.constant, this.exponent); }
 
     public String toString() {
+        if (this.constant == 0)
+            return "0";
+        if (this.exponent == 0)
+            return "1";
+
         String variableString = this.label;
-        if (this.constant == -1) {
+        if (this.label.equals("")) {
+            variableString = checkDecimal(this.constant) + variableString;
+        } else if (this.constant == -1) {
             variableString = "-" + variableString;
         } else if (this.constant != 1) {
             variableString = checkDecimal(this.constant) + variableString;
@@ -80,5 +101,14 @@ public class Variable {
 
     public boolean hasLabel() {
         return !this.label.equals("");
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
     }
 }

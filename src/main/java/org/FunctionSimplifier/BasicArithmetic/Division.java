@@ -3,7 +3,7 @@ package org.FunctionSimplifier.BasicArithmetic;
 import org.FunctionSimplifier.Function;
 import org.FunctionSimplifier.Variable;
 
-public class Division extends Function {
+public class Division extends Function implements Arithmetic{
     private Variable left;
     private Variable right;
 
@@ -20,6 +20,16 @@ public class Division extends Function {
     public Division(Variable _left, Variable _right) {
         this.left = _left;
         this.right = _right;
+    }
+
+    public Division(String _left, String _right) {
+        this.left = new Variable(_left);
+        this.right = new Variable(_right);
+    }
+
+    public Division() {
+        this.left = null;
+        this.right = null;
     }
 
     public String toString() {
@@ -39,6 +49,26 @@ public class Division extends Function {
         } else {
             return new Function(this.left.evaluate() / this.right.evaluate());
         }
+    }
+
+    @Override
+    public Variable getLeft() {
+        return this.left;
+    }
+
+    @Override
+    public void setLeft(String _left) {
+        this.left = new Variable(_left);
+    }
+
+    @Override
+    public Variable getRight() {
+        return null;
+    }
+
+    @Override
+    public void setRight(String _right) {
+        this.right = new Variable(_right);
     }
 
     public Variable evaluate(double leftValue, double rightValue) {

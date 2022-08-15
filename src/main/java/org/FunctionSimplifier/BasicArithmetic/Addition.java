@@ -5,50 +5,39 @@ import org.FunctionSimplifier.Rules.Commutation;
 import org.FunctionSimplifier.Variable;
 
 public class Addition extends Function implements Commutation, Arithmetic {
-    private Function left;
-    private Function right;
+    private Variable left;
+    private Variable right;
 
-    public Addition() {
-        this.left = new Function(0);
-        this.right = new Function(0);
+    public Addition(String _left, String _right) {
+        this.left = new Variable(_left);
+        this.right = new Variable(_right);
     }
 
     public Addition(int _left, int _right) {
-        this.left = new Function(_left);
-        this.right = new Function(_right);
+        this.left = new Variable(_left);
+        this.right = new Variable(_right);
     }
 
     public Addition(double _left, double _right) {
-        this.left = new Function(_left);
-        this.right = new Function(_right);
+        this.left = new Variable(_left);
+        this.right = new Variable(_right);
     }
 
     public Addition(Variable _left, Variable _right) {
-        this.left = new Function(_left);
-        this.right = new Function(_right);
-    }
-
-    public Addition(Function _left, Function _right) {
         this.left = _left;
         this.right = _right;
     }
 
+    public Addition() {
+        this.left = null;
+        this.right = null;
+    }
+
     @Override
     public void applyCommutation() {
-        Function temp = this.left;
+        Variable temp = this.left;
         this.left = this.right;
         this.right = temp;
-        /*String tempLabel = this.left.getLabel();
-        double tempConstant = this.left.getConstant();
-        double tempExponent = this.left.getExponent();
-
-        this.left.setLabel(this.right.getLabel());
-        this.left.setConstant(this.right.getConstant());
-        this.left.setExponent(this.right.getExponent());
-
-        this.right.setLabel(tempLabel);
-        this.right.setConstant(tempConstant);
-        this.right.setExponent(tempExponent);*/
     }
 
     public String toString() {
@@ -56,43 +45,32 @@ public class Addition extends Function implements Commutation, Arithmetic {
     }
 
     public Function evaluate() {
-        Function newLeft = this.left.evaluate();
-        Function newRight = this.right.evaluate();
-        if (newLeft.isVariable() && newRight.isVariable()) {
-            Variable leftVariable = (Variable) newLeft.getBody();
-            Variable rightVariable = (Variable) newRight.getBody();
-            if (leftVariable.getLabel().equals(rightVariable.getLabel()) && leftVariable.getExponent() == rightVariable.getExponent()) {
-                return new Function(new Variable(leftVariable.getLabel(),
-                        leftVariable.getConstant() + rightVariable.getConstant(),
-                        leftVariable.getExponent()));
-            } else {
-                return new Function(new Addition(leftVariable, rightVariable));
-            }
-        } else if (newLeft.isVariable()) {
-            newLeft = new Addition(newLeft, newRight.getLeftVariable()).evaluate();
-            newRight = newRight.getRightFunction().evaluate();
-        } else if (newRight.isVariable()) {
-            newRight = new Addition(newLeft.getRightVariable(), newRight).evaluate();
-            newLeft = newLeft.getLeftFunction().evaluate();
+        if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent()) {
+            return new Function(new Variable(this.left.getLabel(),
+                    this.left.getConstant() + this.right.getConstant(),
+                    this.right.getExponent()));
+        } else {
+            return new Function(new Addition(this.left, this.right));
         }
-
-        if (newLeft.toString().equals(this.left.toString()) && newRight.toString().equals(this.right.toString()))
-            return new Addition(newLeft, newRight);
-        else
-            return new Addition(newLeft, newRight);
     }
 
     @Override
-    public Function getLeft() {
+    public Variable getLeft() {
         return this.left;
     }
 
     @Override
-    public Function getRight() {
+    public void setLeft(String _left) {
+        this.left = new Variable(_left);
+    }
+
+    @Override
+    public Variable getRight() {
         return this.right;
     }
-/*
-    public Variable evaluate(double leftValue, double rightValue) {
-        return new Variable(this.left.evaluate(leftValue) + this.right.evaluate(rightValue));
-    }*/
+
+    @Override
+    public void setRight(String _right) {
+        this.right = new Variable(_right);
+    }
 }
