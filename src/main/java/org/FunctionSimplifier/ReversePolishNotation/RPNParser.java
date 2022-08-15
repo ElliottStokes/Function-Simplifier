@@ -13,47 +13,62 @@ public class RPNParser {
     }
 
     public String parse(String input) {
-        char[] inputCharacters = input.replace(" ", "").toCharArray();
+        String[] inputCharacters = input.split(" ");
         StringBuilder outputString = new StringBuilder();
         Operator operator;
 
-        for (Character c : inputCharacters) {
+        for (String c : inputCharacters) {
             if (this.isOperator(c)) {
-                if (c.equals('+'))
+                if (c.equals("+"))
                     operator = new Add();
-                else if (c.equals('-'))
+                else if (c.equals("-"))
                     operator = new Subtract();
-                else if (c.equals('*'))
+                else if (c.equals("*"))
                     operator = new Multiply();
-                else if (c.equals('/'))
+                else if (c.equals("/"))
                     operator = new Divide();
                 else
                     operator = new Power();
 
                 while (!this.operatorStack.isEmpty() && this.operatorStack.peek().getPriority() <= operator.getPriority())
-                    outputString.append(this.operatorStack.pop().toString());
+                    outputString.append(this.operatorStack.pop().toString()).append(" ");
 
                 this.operatorStack.push(operator);
             }
-            else if (c.equals('(')) {
+            else if (c.equals("(")) {
                 this.operatorStack.push(new OpenBracket());
+                outputString.append(c).append(" ");
             }
-            else if (c.equals(')')) {
-                while (!(this.operatorStack.peek() instanceof OpenBracket))
-                    outputString.append(this.operatorStack.pop().toString());
-                this.operatorStack.pop();
+            else if (c.equals(")")) {
+                if (!this.operatorStack.isEmpty()) {
+                    while (!(this.operatorStack.peek() instanceof OpenBracket))
+                        outputString.append(this.operatorStack.pop().toString()).append(" ");
+                    this.operatorStack.pop();
+                }
+                outputString.append(c).append(" ");
             }
             else
-                outputString.append(c);
+                outputString.append(c).append(" ");
         }
 
         while (!this.operatorStack.isEmpty())
-            outputString.append(this.operatorStack.pop().toString());
+            outputString.append(this.operatorStack.pop().toString()).append(" ");
 
-        return outputString.toString();
+        return outputString.toString().strip();
     }
 
+    public boolean isOperator(String value) {
+        return this.operators.contains(value);
+    }
     public boolean isOperator(Character value) {
-        return this.operators.contains(value.toString());
+        return this.isOperator(value.toString());
+    }
+
+    public boolean containsOperator(String values) {
+        for (int i = 0; i < values.length(); i++)
+            if (isOperator(values.charAt(i)))
+                return true;
+
+        return false;
     }
 }
