@@ -10,7 +10,7 @@ public class SyntaxTree {
     private String infixNotation;
     private String reversePolishNotation;
     private Queue<Operator> orderOfOperations;
-    private HashMap<Character, Variable> variables;
+    private HashMap<String, Variable> variables;
     private RootNode rootNode = null;
     private RPNParser rpnParser = new RPNParser();
 
@@ -21,62 +21,68 @@ public class SyntaxTree {
         this.orderOfOperations = new LinkedList<>();
         this.variables = new HashMap<>();
 
-        for (Character c : this.reversePolishNotation.toCharArray())
-            if (rpnParser.isOperator(c))
-                if (c.equals('+'))
+        String[] components = this.reversePolishNotation.split(" ");
+
+        for (String component : components)
+            if (rpnParser.isOperator(component))
+                if (component.equals("+"))
                     this.orderOfOperations.add(new Add());
-                else if (c.equals('-'))
+                else if (component.equals("-"))
                     this.orderOfOperations.add(new Subtract());
-                else if (c.equals('*'))
+                else if (component.equals("*"))
                     this.orderOfOperations.add(new Multiply());
-                else if (c.equals('/'))
+                else if (component.equals("/"))
                     this.orderOfOperations.add(new Divide());
                 else
                     this.orderOfOperations.add(new Power());
             else
-                if (!this.variables.containsKey(c))
-                    this.variables.put(c, new Variable(c));
+                if (!this.variables.containsKey(component))
+                    this.variables.put(component, new Variable(component));
 
         this.rootNode = createTree(this.reversePolishNotation);
     }
 
     private RootNode createTree(String rpnExpression) {
-        StringBuilder rpnCopy = new StringBuilder(rpnExpression);
+        //StringBuilder rpnCopy = new StringBuilder(rpnExpression);
+        LinkedList<String> components = new LinkedList<>(List.of(rpnExpression.split(" ")));
 
         LeafNode leftNode, rightNode;
-        BranchNode subTree;
+        BranchNode leftSubTree, rightSubTree;
 
-        int operationIndex = rpnCopy.indexOf(this.orderOfOperations.peek().toString());
+        int operationIndex = 0;
+        while (!components.get(operationIndex).equals(this.orderOfOperations.peek().toString()))
+            operationIndex++;
 
-        rightNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-1)));
-        leftNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-2)));
+        rightNode = new LeafNode(this.variables.get(components.get(operationIndex-1)));
+        leftNode = new LeafNode(this.variables.get(components.get(operationIndex-2)));
         RootNode treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
-        rpnCopy.delete(operationIndex-2, operationIndex+1);
-        operationIndex -= 2;
-
+        components.remove(operationIndex--);
+        components.remove(operationIndex--);
+        components.remove(operationIndex);
 
         while(!this.orderOfOperations.isEmpty()) {
-            operationIndex = rpnCopy.indexOf(this.orderOfOperations.peek().toString());
-            rightNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-1)));
+            while (!components.get(operationIndex).equals(this.orderOfOperations.peek().toString()))
+                operationIndex++;
+            rightNode = new LeafNode(this.variables.get(components.get(operationIndex-1)));
 
-            if (operationIndex > 2 && !rpnParser.containsOperator(rpnCopy.substring(0, operationIndex))) {
-                while(!this.orderOfOperations.isEmpty()) {
-                    leftNode = new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-1)));
-                    treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, treeRootNode);
-                    rpnCopy.delete(operationIndex-1, operationIndex+1);
-                    operationIndex -= 1;
-                }
+            if (operationIndex >= 2 && components.get(operationIndex-2).equals("(")) {
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightNode);
+                components.remove(operationIndex + 1); // Remove close bracket
+                components.remove(operationIndex--);         // Remove operator
+                components.remove(operationIndex--);         // Remove variable
+                components.remove(operationIndex);         // Remove open bracket
             }
-            else if (operationIndex >= 2 && !rpnParser.isOperator(rpnCopy.charAt(operationIndex-2))) {
-                subTree = new BranchNode(this.orderOfOperations.remove(), new LeafNode(this.variables.get(rpnCopy.charAt(operationIndex-2))), rightNode);
-                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), subTree);
-                rpnCopy.delete(operationIndex-2, operationIndex+1);
-                operationIndex -= 2;
+            else if (operationIndex >= 2 && !rpnParser.isOperator(components.get(operationIndex-2))) {
+                rightSubTree = new BranchNode(this.orderOfOperations.remove(), new LeafNode(this.variables.get(components.get(operationIndex-2))), rightNode);
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightSubTree);
+                components.remove(operationIndex--);
+                components.remove(operationIndex--);
+                components.remove(operationIndex);
             }
             else {
                 treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightNode);
-                rpnCopy.delete(operationIndex-1, operationIndex+1);
-                operationIndex -= 1;
+                components.remove(operationIndex--);
+                components.remove(operationIndex);
             }
         }
         return treeRootNode;

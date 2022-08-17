@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+@Deprecated
 public class SyntaxTreeWithBrackets {
     private String infixNotation;
     private String reversePolishNotation;
