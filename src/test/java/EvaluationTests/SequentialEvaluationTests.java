@@ -40,7 +40,7 @@ public class SequentialEvaluationTests {
         Assertions.assertEquals("2x + y^2", sequentialEvaluation.evaluate("x + x + y * y"));
         Assertions.assertEquals("0", sequentialEvaluation.evaluate("5x + 2x - 7x"));
         Assertions.assertEquals("2x^2 + 5x - 7", sequentialEvaluation.evaluate("x^2 + x^2 + 3x + 2x - 7"));
-        Assertions.assertEquals("4x^2", sequentialEvaluation.evaluate("x^2 * x^2"));
+        Assertions.assertEquals("x^4", sequentialEvaluation.evaluate("x ^ 2 * x ^ 2"));
         Assertions.assertEquals("xy", sequentialEvaluation.evaluate("x * y"));
     }
 }

@@ -69,7 +69,7 @@ public class Multiplication extends Function implements Arithmetic, Commutation,
             left.setConstant(left.getConstant() * right.getConstant());
             return new Function(left);
         } else {
-            return new Function(new Multiplication(left, right));
+            return new Function(new Variable(this.left.getLabel() + this.right.getLabel()));
         }
     }
 
