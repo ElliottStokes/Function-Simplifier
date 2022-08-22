@@ -18,7 +18,11 @@ public class Indices implements Arithmetic {
     }
 
     public Function evaluate() {
-        if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent()) {
+        if (!this.left.getLabel().equals("") && this.right.getLabel().equals("")) {
+            return new Function(new Variable(this.left.getLabel(),
+                    this.left.getConstant(),
+                    this.left.getExponent() * this.right.getConstant()));
+        } else if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent()) {
             return new Function(new Variable(this.left.getLabel(),
                     Math.pow(this.left.getConstant(), this.right.getConstant()),
                     this.left.getExponent()));
