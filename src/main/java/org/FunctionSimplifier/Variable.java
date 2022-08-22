@@ -6,23 +6,29 @@ public class Variable {
     private double exponent;
 
     public Variable(String label) {
-        int labelIndex = 0;
+        int labelIndex = 0, exponentIndex;
         for (int i = 0; i < label.length(); i++) {
             if (isNumeric(String.valueOf(label.charAt(i))) || label.charAt(i) == '-')
                 labelIndex++;
             else
                 break;
         }
+        if (label.contains("^")) {
+            exponentIndex = label.indexOf('^');
+        } else
+            exponentIndex = label.length();
 
-        if (labelIndex > 0) {
-            this.label = label.substring(labelIndex);
+        this.label = label.substring(labelIndex, exponentIndex);
+
+        if (labelIndex > 0)
             this.constant = Double.parseDouble(label.substring(0, labelIndex));
-        } else {
-            this.label = label;
+        else
             this.constant = 1;
-        }
 
-        this.exponent = 1;
+        if (label.contains("^"))
+            this.exponent = Double.parseDouble(label.substring(label.indexOf('^')+1));
+        else
+            this.exponent = 1;
     }
 
     public Variable(double constant) {
