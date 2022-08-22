@@ -11,8 +11,11 @@ public class SyntaxTree {
     private String reversePolishNotation;
     private Queue<Operator> orderOfOperations;
     private HashMap<String, Variable> variables;
-    private RootNode rootNode = null;
+    private RootNode rootNode;
     private RPNParser rpnParser = new RPNParser();
+    private HashMap<String, RootNode> epsilonSubTrees = new HashMap<>();
+
+    private final String EPSILON = "epsilon";
 
     public SyntaxTree(String _infixExpression) {
         this.infixNotation = _infixExpression;
@@ -43,44 +46,65 @@ public class SyntaxTree {
     }
 
     private RootNode createTree(String rpnExpression) {
-        //StringBuilder rpnCopy = new StringBuilder(rpnExpression);
         LinkedList<String> components = new LinkedList<>(List.of(rpnExpression.split(" ")));
 
         LeafNode leftNode, rightNode;
         BranchNode leftSubTree, rightSubTree;
+        RootNode treeRootNode;
+
+        String epsilonLabel;
 
         int operationIndex = 0;
         while (!components.get(operationIndex).equals(this.orderOfOperations.peek().toString()))
             operationIndex++;
 
-        rightNode = new LeafNode(this.variables.get(components.get(operationIndex-1)));
-        leftNode = new LeafNode(this.variables.get(components.get(operationIndex-2)));
-        RootNode treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
-        components.remove(operationIndex--);
-        components.remove(operationIndex--);
+        rightNode = new LeafNode(this.variables.get(components.remove(--operationIndex)));
+        leftNode = new LeafNode(this.variables.get(components.remove(--operationIndex)));
+        treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
         components.remove(operationIndex);
+        if (operationIndex >= 1 && components.get(operationIndex).equals(")") && components.get(operationIndex-1).equals("(")) {
+            components.remove(operationIndex--); // Remove close bracket
+            components.remove(operationIndex);   // Remove open bracket
+        }
 
         while(!this.orderOfOperations.isEmpty()) {
+            // Create the placeholder of the epsilon-subTree and add it in the position of the root node operator in the RPN expression
+            epsilonLabel = EPSILON+this.epsilonSubTrees.size();
+            components.add(operationIndex, epsilonLabel);
+            this.epsilonSubTrees.put(epsilonLabel, treeRootNode);
+
             while (!components.get(operationIndex).equals(this.orderOfOperations.peek().toString()))
                 operationIndex++;
-            rightNode = new LeafNode(this.variables.get(components.get(operationIndex-1)));
 
-            if (operationIndex >= 2 && components.get(operationIndex-2).equals("(")) {
-                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightNode);
-                components.remove(operationIndex + 1); // Remove close bracket
-                components.remove(operationIndex--);         // Remove operator
-                components.remove(operationIndex--);         // Remove variable
-                components.remove(operationIndex);         // Remove open bracket
+            // If the current operator will be applied to two epsilon subtrees
+            if (components.get(operationIndex-1).contains(EPSILON) && components.get(operationIndex-2).contains(EPSILON)) {
+                rightSubTree = this.epsilonSubTrees.remove(components.remove(--operationIndex)).convertToBranch();
+                leftSubTree = this.epsilonSubTrees.remove(components.remove(--operationIndex)).convertToBranch();
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), leftSubTree, rightSubTree);
+                components.remove(operationIndex); // Remove operator
             }
-            else if (operationIndex >= 2 && !rpnParser.isOperator(components.get(operationIndex-2))) {
-                rightSubTree = new BranchNode(this.orderOfOperations.remove(), new LeafNode(this.variables.get(components.get(operationIndex-2))), rightNode);
-                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightSubTree);
-                components.remove(operationIndex--);
-                components.remove(operationIndex--);
-                components.remove(operationIndex);
+            // If the current operator will be applied to an epsilon subtree in the right node
+            else if (components.get(operationIndex-1).contains(EPSILON)) {
+                rightSubTree = this.epsilonSubTrees.remove(components.remove(--operationIndex)).convertToBranch();
+                leftNode = new LeafNode(this.variables.get(components.remove(--operationIndex)));
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightSubTree);
+                components.remove(operationIndex); // Remove operator
+            }
+            // If the current operator will be applied to an epsilon subtree in the left node
+            else if (components.get(operationIndex-2).contains(EPSILON)) {
+                rightNode = new LeafNode(this.variables.get(components.remove(--operationIndex)));
+                leftSubTree = this.epsilonSubTrees.remove(components.remove(--operationIndex)).convertToBranch();
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), leftSubTree, rightNode);
+                components.remove(operationIndex); // Remove operator
             }
             else {
-                treeRootNode = new RootNode(this.orderOfOperations.remove(), treeRootNode.convertToBranch(), rightNode);
+                rightNode = new LeafNode(this.variables.get(components.remove(--operationIndex)));
+                leftNode = new LeafNode(this.variables.get(components.remove(--operationIndex)));
+                treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
+                components.remove(operationIndex); // Remove operator
+            }
+
+            if (components.size() > 1 && components.get(operationIndex).equals(")") && components.get(operationIndex-1).equals("(")) {
                 components.remove(operationIndex--);
                 components.remove(operationIndex);
             }
@@ -96,7 +120,7 @@ public class SyntaxTree {
         if (mainNode instanceof LeafNode)
             return mainNode.toString();
         else
-            return depthFirstTraversal_R(mainNode.getLeftNode())  + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode.toString();
+            return depthFirstTraversal_R(mainNode.getLeftNode())  + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode;
     }
 
     public RootNode getRootNode() {

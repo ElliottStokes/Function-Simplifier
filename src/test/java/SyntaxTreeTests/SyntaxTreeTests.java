@@ -28,8 +28,8 @@ public class SyntaxTreeTests {
         SyntaxTree tree2 = new SyntaxTree("x + y + z");
         Assertions.assertEquals("xy+z+", tree2.depthFirstTraversal());
 
-        //SyntaxTree tree3 = new SyntaxTree("( ( ( ( ( x + y ) - v ) / x ) * y ) - z )");
-        //Assertions.assertEquals("xy+v-x/y*z-", tree3.depthFirstTraversal());
+        SyntaxTree tree3 = new SyntaxTree("( ( ( ( ( x + y ) - v ) / x ) * y ) - z )");
+        Assertions.assertEquals("xy+v-x/y*z-", tree3.depthFirstTraversal());
 
         SyntaxTree tree4 = new SyntaxTree("( x - y ) / ( z - m )");
         Assertions.assertEquals("xy-zm-/", tree4.depthFirstTraversal());
@@ -37,10 +37,13 @@ public class SyntaxTreeTests {
         SyntaxTree tree5 = new SyntaxTree("x + y + z - a * b");
         Assertions.assertEquals("xy+z+ab*-", tree5.depthFirstTraversal());
 
-        //SyntaxTree tree6 = new SyntaxTree("x - ( y + z * ( a / b ^ n ) )");
-        //Assertions.assertEquals("xyzabn^/*+-", tree6.depthFirstTraversal());
+        SyntaxTree tree6 = new SyntaxTree("x - ( y + z * ( a / b ^ n ) )");
+        Assertions.assertEquals("xyzabn^/*+-", tree6.depthFirstTraversal());
 
-        //SyntaxTree tree7 = new SyntaxTree("x - ( ( y + z + p ) * ( a / b ^ n ) )");
-        //Assertions.assertEquals("xyz+p+abn^/*-", tree7.depthFirstTraversal());
+        SyntaxTree tree7 = new SyntaxTree("x - ( ( y + z + p ) * ( a / b ^ n ) )");
+        Assertions.assertEquals("xyz+p+abn^/*-", tree7.depthFirstTraversal());
+
+        SyntaxTree tree8 = new SyntaxTree("B * C + ( E + F * G )");
+        Assertions.assertEquals("BC*EFG*++", tree8.depthFirstTraversal());
     }
 }
