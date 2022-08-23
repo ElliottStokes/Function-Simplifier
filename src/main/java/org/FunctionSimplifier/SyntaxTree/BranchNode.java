@@ -26,6 +26,10 @@ public class BranchNode implements Node {
         this.rightNode = _rightNode;
     }
 
+    public Node evaluate() {
+        return this.operator.evaluate(this.leftNode, this.rightNode);
+    }
+
     public void setLeftNode(BranchNode node) {
         this.leftNode = node;
     }
@@ -55,4 +59,11 @@ public class BranchNode implements Node {
         return this.rightNode;
     }
     public void setRightNode(Node node) { this.rightNode = node; }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+    public int getOrder() {
+        return this.order;
+    }
 }

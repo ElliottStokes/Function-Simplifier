@@ -13,6 +13,10 @@ public class LeafNode implements Node {
         return this.variable.toString();
     }
 
+    public Variable getVariable() {
+        return this.variable;
+    }
+
     public Node getLeftNode() {
         return null;
     }

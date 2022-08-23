@@ -6,6 +6,7 @@ public class RootNode implements Node {
     private Operator operator;
     private Node leftNode;
     private Node rightNode;
+    private int order;
 
     public RootNode() {
         this.operator = null;
@@ -45,4 +46,15 @@ public class RootNode implements Node {
         return this.rightNode;
     }
     public void setRightNode(Node node) { this.rightNode = node; }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+    public int getOrder() {
+        return this.order;
+    }
+
+    public Node evaluate() {
+        return this.operator.evaluate(this.leftNode, this.rightNode);
+    }
 }
