@@ -43,6 +43,7 @@ public class SyntaxTree {
                     this.variables.put(component, new Variable(component));
 
         this.rootNode = createTree(this.reversePolishNotation);
+        this.convertToCodedSyntaxTree();
     }
 
     private RootNode createTree(String rpnExpression) {
@@ -53,6 +54,7 @@ public class SyntaxTree {
         RootNode treeRootNode;
 
         String epsilonLabel;
+        int epsilonNumber = 1;
 
         int operationIndex = 0;
         while (!components.get(operationIndex).equals(this.orderOfOperations.peek().toString()))
@@ -69,7 +71,7 @@ public class SyntaxTree {
 
         while(!this.orderOfOperations.isEmpty()) {
             // Create the placeholder of the epsilon-subTree and add it in the position of the root node operator in the RPN expression
-            epsilonLabel = EPSILON+this.epsilonSubTrees.size();
+            epsilonLabel = EPSILON+(epsilonNumber++);
             components.add(operationIndex, epsilonLabel);
             this.epsilonSubTrees.put(epsilonLabel, treeRootNode);
 
@@ -112,6 +114,26 @@ public class SyntaxTree {
         return treeRootNode;
     }
 
+    public void convertToCodedSyntaxTree() {
+        int order = 1;
+        order = codedSyntaxTree_DFT(this.rootNode, order);
+    }
+
+    private int codedSyntaxTree_DFT(Node node, int order) {
+        if (node instanceof BranchNode) {
+            order = codedSyntaxTree_DFT(node.getLeftNode(), order);
+            order = codedSyntaxTree_DFT(node.getRightNode(), order);
+            ((BranchNode) node).setOrder(order++);
+        }
+        else if (node instanceof RootNode) {
+            order = codedSyntaxTree_DFT(node.getLeftNode(), order);
+            order = codedSyntaxTree_DFT(node.getRightNode(), order);
+            ((RootNode) node).setOrder(order++);
+        }
+
+        return order;
+    }
+
     public String depthFirstTraversal() {
         return depthFirstTraversal_R(this.rootNode);
     }
@@ -121,6 +143,25 @@ public class SyntaxTree {
             return mainNode.toString();
         else
             return depthFirstTraversal_R(mainNode.getLeftNode())  + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode;
+    }
+
+    public String simplify() {
+        Node simplifiedTree = simplify_DFT(this.rootNode);
+        return this.depthFirstTraversal_R(simplifiedTree);
+    }
+
+    private Node simplify_DFT(Node node) {
+        if (node instanceof BranchNode) {
+            ((BranchNode) node).setLeftNode(simplify_DFT(node.getLeftNode()));
+            ((BranchNode) node).setRightNode(simplify_DFT(node.getRightNode()));
+            return ((BranchNode) node).evaluate();
+        }
+        else if (node instanceof RootNode) {
+            ((RootNode) node).setLeftNode(simplify_DFT(node.getLeftNode()));
+            ((RootNode) node).setRightNode(simplify_DFT(node.getRightNode()));
+            return ((RootNode) node).evaluate();
+        }
+        return node;
     }
 
     public RootNode getRootNode() {
