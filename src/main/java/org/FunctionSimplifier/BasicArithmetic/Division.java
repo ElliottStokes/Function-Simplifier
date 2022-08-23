@@ -27,7 +27,7 @@ public class Division extends Function {
     }
 
     public Function evaluate() {
-        if (this.left.hasLabel() && this.left.getLabel().equals(this.right.getLabel())) {
+        if (this.left.getLabel().equals(this.right.getLabel())) {
             double exponentValue = this.left.getExponent() - this.right.getExponent();
             double constantValue = this.left.getConstant() / this.right.getConstant();
 
@@ -36,7 +36,15 @@ public class Division extends Function {
             } else {
                 return new Function(new Variable(this.left.getLabel(), constantValue, exponentValue));
             }
-        } else {
+        } else if (this.left.hasLabel() && this.right.hasLabel())
+            return new Function(this);
+        else if (this.left.hasLabel())
+            return new Function(new Variable(this.left.getLabel(),
+                    this.left.getConstant() / this.right.getConstant(),
+                    this.left.getExponent()));
+        else if (this.right.hasLabel())
+            return new Function(this);
+        else {
             return new Function(this.left.evaluate() / this.right.evaluate());
         }
     }

@@ -1,8 +1,8 @@
 package org.FunctionSimplifier.BasicArithmetic;
 
-import org.FunctionSimplifier.Function;
+import org.FunctionSimplifier.Variable;
 
 public interface Arithmetic {
-    Function getLeft();
-    Function getRight();
+    Variable getLeft();
+    Variable getRight();
 }
