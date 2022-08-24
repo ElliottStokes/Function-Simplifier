@@ -177,7 +177,7 @@ public class SyntaxTree {
 
     public String simplify() {
         Node simplifiedTree = simplify_DFT(this.rootNode);
-        return this.depthFirstTraversal_R(simplifiedTree);
+        return this.inOrderTraversal_R(simplifiedTree);
     }
 
     private Node simplify_DFT(Node node) {

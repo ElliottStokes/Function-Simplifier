@@ -113,7 +113,7 @@ public class SyntaxTreeTests {
         Assertions.assertEquals("15", tree3.simplify());
 
         SyntaxTree tree4 = new SyntaxTree("5x + 10");
-        Assertions.assertEquals("5x10+", tree4.simplify());
+        Assertions.assertEquals("5x+10", tree4.simplify());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SyntaxTreeTests {
         Assertions.assertEquals("x^2", tree1.simplify());
 
         SyntaxTree tree2 = new SyntaxTree("x * y");
-        Assertions.assertEquals("xy*", tree2.simplify());
+        Assertions.assertEquals("x*y", tree2.simplify());
     }
 
     @Test
