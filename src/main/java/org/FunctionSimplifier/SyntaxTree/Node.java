@@ -4,4 +4,5 @@ public interface Node {
     Node getLeftNode();
     Node getRightNode();
     String toString();
+    int getPriority();
 }

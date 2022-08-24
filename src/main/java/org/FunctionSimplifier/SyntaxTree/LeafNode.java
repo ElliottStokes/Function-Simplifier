@@ -24,4 +24,8 @@ public class LeafNode implements Node {
     public Node getRightNode() {
         return null;
     }
+
+    public int getPriority() {
+        return 0;
+    }
 }

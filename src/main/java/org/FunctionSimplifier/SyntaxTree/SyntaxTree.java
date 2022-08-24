@@ -142,7 +142,37 @@ public class SyntaxTree {
         if (mainNode instanceof LeafNode)
             return mainNode.toString();
         else
-            return depthFirstTraversal_R(mainNode.getLeftNode())  + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode;
+            return depthFirstTraversal_R(mainNode.getLeftNode()) + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode;
+    }
+
+    public String inOrderTraversal() {
+        return inOrderTraversal_R(this.rootNode);
+    }
+
+    private String inOrderTraversal_R(Node mainNode) {
+        if (mainNode instanceof LeafNode)
+            return mainNode.toString();
+        else {
+            StringBuilder output = new StringBuilder();
+            if (mainNode.getPriority() < mainNode.getLeftNode().getPriority()) {
+                output.append("(");
+                output.append(inOrderTraversal_R(mainNode.getLeftNode()));
+                output.append(")");
+            }
+            else {
+                output.append(inOrderTraversal_R(mainNode.getLeftNode()));
+            }
+            output.append(mainNode);
+            if (mainNode.getPriority() < mainNode.getRightNode().getPriority()) {
+                output.append("(");
+                output.append(inOrderTraversal_R(mainNode.getRightNode()));
+                output.append(")");
+            }
+            else {
+                output.append(inOrderTraversal_R(mainNode.getRightNode()));
+            }
+            return output.toString();
+        }
     }
 
     public String simplify() {

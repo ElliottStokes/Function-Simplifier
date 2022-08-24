@@ -57,4 +57,8 @@ public class RootNode implements Node {
     public Node evaluate() {
         return this.operator.evaluate(this.leftNode, this.rightNode);
     }
+
+    public int getPriority() {
+        return this.operator.getPriority();
+    }
 }

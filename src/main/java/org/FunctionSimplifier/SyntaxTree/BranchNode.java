@@ -66,4 +66,8 @@ public class BranchNode implements Node {
     public int getOrder() {
         return this.order;
     }
+
+    public int getPriority() {
+        return this.operator.getPriority();
+    }
 }
