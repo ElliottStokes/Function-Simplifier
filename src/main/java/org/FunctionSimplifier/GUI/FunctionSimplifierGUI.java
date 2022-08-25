@@ -1,5 +1,9 @@
 package org.FunctionSimplifier.GUI;
 
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.parse.Parser;
 import org.FunctionSimplifier.SyntaxTree.SyntaxTree;
 
 import javax.swing.*;
@@ -8,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class FunctionSimplifierGUI extends JFrame implements ActionListener {
     public FunctionSimplifierGUI() {
@@ -31,11 +37,18 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
         functionPanel.add(output);
 
         JButton run = new JButton("Run");
-        run.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SyntaxTree syntaxTree = new SyntaxTree(input.getText());
-                output.setText(syntaxTree.simplify());
+        run.addActionListener(e -> {
+            SyntaxTree syntaxTree = new SyntaxTree(input.getText());
+            String dotGraphInputString = syntaxTree.toDigraph();
+            output.setText(syntaxTree.simplify());
+            String dotGraphOutputString = syntaxTree.toDigraph();
+            try {
+                MutableGraph dotGraphInput = new Parser().read(dotGraphInputString);
+                Graphviz.fromGraph(dotGraphInput).width(700).render(Format.PNG).toFile(new File("syntaxTreeInput.png"));
+                MutableGraph dotGraphOutput = new Parser().read(dotGraphOutputString);
+                Graphviz.fromGraph(dotGraphOutput).width(700).render(Format.PNG).toFile(new File("syntaxTreeOutput.png"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         });
         functionPanel.add(run);

@@ -194,6 +194,34 @@ public class SyntaxTree {
         return node;
     }
 
+    public String toDigraph() {
+        StringBuffer dotGraph = new StringBuffer();
+        dotGraph.append("digraph syntaxTree{\n" +
+                "graph [rankdir=TB]\n");
+        dotGraph.append(digraph_DFT(this.rootNode, 1));
+        dotGraph.append("}");
+
+        return dotGraph.toString();
+    }
+
+    public String digraph_DFT(Node node, int label) {
+        StringBuffer subTree = new StringBuffer();
+        if (!(node instanceof LeafNode)) {
+            int leftLabel = (2 * label);
+            int rightLabel = ((2 * label) + 1);
+            subTree.append("\""+label+"\" [label=\""+node.toString()+"\"];\n"+
+                           "\""+leftLabel+"\" [label=\""+node.getLeftNode().toString()+"\"];\n"+
+                           "\""+rightLabel+"\" [label=\""+node.getRightNode().toString()+"\"];\n"+
+                           "\""+label+"\"->\""+leftLabel+"\";\n"+
+                           "\""+label+"\"->\""+rightLabel+"\";\n");
+
+            subTree.append(digraph_DFT(node.getLeftNode(), (2 * label)));
+            subTree.append(digraph_DFT(node.getRightNode(), (2 * label) + 1));
+        }
+
+        return subTree.toString();
+    }
+
     public RootNode getRootNode() {
         return this.rootNode;
     }
