@@ -65,6 +65,9 @@ public class SyntaxTree {
         treeRootNode = new RootNode(this.orderOfOperations.remove(), leftNode, rightNode);
         components.remove(operationIndex);
         if (operationIndex >= 1 && components.get(operationIndex).equals(")") && components.get(operationIndex-1).equals("(")) {
+            rightNode = new LeafNode(new Variable(")"));
+            leftSubTree = treeRootNode.convertToBranch();
+            treeRootNode = new RootNode(new OpenBracket(), leftSubTree, rightNode);
             components.remove(operationIndex--); // Remove close bracket
             components.remove(operationIndex);   // Remove open bracket
         }
@@ -106,9 +109,12 @@ public class SyntaxTree {
                 components.remove(operationIndex); // Remove operator
             }
 
-            if (components.size() > 1 && components.get(operationIndex).equals(")") && components.get(operationIndex-1).equals("(")) {
-                components.remove(operationIndex--);
-                components.remove(operationIndex);
+            if (operationIndex >= 1 && components.get(operationIndex).equals(")") && components.get(operationIndex-1).equals("(")) {
+                rightNode = new LeafNode(new Variable(")"));
+                leftSubTree = treeRootNode.convertToBranch();
+                treeRootNode = new RootNode(new OpenBracket(), leftSubTree, rightNode);
+                components.remove(operationIndex--); // Remove close bracket
+                components.remove(operationIndex);   // Remove open bracket
             }
         }
         return treeRootNode;
@@ -123,7 +129,8 @@ public class SyntaxTree {
         if (node instanceof BranchNode) {
             order = codedSyntaxTree_DFT(node.getLeftNode(), order);
             order = codedSyntaxTree_DFT(node.getRightNode(), order);
-            ((BranchNode) node).setOrder(order++);
+            if (!node.toString().equals("("))
+                ((BranchNode) node).setOrder(order++);
         }
         else if (node instanceof RootNode) {
             order = codedSyntaxTree_DFT(node.getLeftNode(), order);
@@ -141,6 +148,8 @@ public class SyntaxTree {
     private String depthFirstTraversal_R(Node mainNode) {
         if (mainNode instanceof LeafNode)
             return mainNode.toString();
+        else if (mainNode.toString().equals("("))
+            return mainNode + depthFirstTraversal_R(mainNode.getLeftNode()) + depthFirstTraversal_R(mainNode.getRightNode());
         else
             return depthFirstTraversal_R(mainNode.getLeftNode()) + depthFirstTraversal_R(mainNode.getRightNode()) + mainNode;
     }
@@ -152,27 +161,10 @@ public class SyntaxTree {
     private String inOrderTraversal_R(Node mainNode) {
         if (mainNode instanceof LeafNode)
             return mainNode.toString();
-        else {
-            StringBuilder output = new StringBuilder();
-            if (mainNode.getPriority() < mainNode.getLeftNode().getPriority()) {
-                output.append("(");
-                output.append(inOrderTraversal_R(mainNode.getLeftNode()));
-                output.append(")");
-            }
-            else {
-                output.append(inOrderTraversal_R(mainNode.getLeftNode()));
-            }
-            output.append(mainNode);
-            if (mainNode.getPriority() < mainNode.getRightNode().getPriority()) {
-                output.append("(");
-                output.append(inOrderTraversal_R(mainNode.getRightNode()));
-                output.append(")");
-            }
-            else {
-                output.append(inOrderTraversal_R(mainNode.getRightNode()));
-            }
-            return output.toString();
-        }
+        else if (mainNode.toString().equals("("))
+            return mainNode + inOrderTraversal_R(mainNode.getLeftNode()) + inOrderTraversal_R(mainNode.getRightNode());
+        else
+            return inOrderTraversal_R(mainNode.getLeftNode()) + mainNode + inOrderTraversal_R(mainNode.getRightNode());
     }
 
     public String simplify() {

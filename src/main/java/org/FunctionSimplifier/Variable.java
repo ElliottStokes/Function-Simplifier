@@ -8,7 +8,7 @@ public class Variable {
     public Variable(String label) {
         int labelIndex = 0, exponentIndex;
         for (int i = 0; i < label.length(); i++) {
-            if (isNumeric(String.valueOf(label.charAt(i))) || label.charAt(i) == '-')
+            if (isNumeric(String.valueOf(label.charAt(i))) || label.charAt(i) == '-' || label.charAt(i) == '.')
                 labelIndex++;
             else
                 break;

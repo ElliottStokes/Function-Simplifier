@@ -16,27 +16,34 @@ public class OpenBracket implements Operator {
 
     @Override
     public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
-        return null;
+        return leftNode;
     }
 
     @Override
     public Node evaluate(BranchNode leftNode, BranchNode rightNode) {
-        return null;
+        return new BranchNode(this, leftNode, rightNode);
     }
 
     @Override
     public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
-        return null;
+        return new BranchNode(this, leftNode, rightNode);
     }
 
     @Override
     public Node evaluate(BranchNode leftNode, LeafNode rightNode) {
-        return null;
+        return new BranchNode(this, leftNode, rightNode);
     }
 
     @Override
     public Node evaluate(Node leftNode, Node rightNode) {
-        return null;
+        if (leftNode instanceof LeafNode && rightNode instanceof LeafNode)
+            return evaluate((LeafNode) leftNode, (LeafNode) rightNode);
+        else if (leftNode instanceof LeafNode)
+            return evaluate((LeafNode) leftNode, (BranchNode) rightNode);
+        else if (rightNode instanceof LeafNode)
+            return evaluate((BranchNode) leftNode, (LeafNode) rightNode);
+        else
+            return evaluate((BranchNode) leftNode, (BranchNode) rightNode);
     }
 
     public String toString() {
