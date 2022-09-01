@@ -129,6 +129,9 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree4 = new SyntaxTree("5 - 10 + 20");
         Assertions.assertEquals("15", tree4.simplify());
+
+        SyntaxTree tree5 = new SyntaxTree("( ( ( y * y ^ 5 ) - ( 5y + 2y ) ) * ( ( y + y ) - y ) )");
+        Assertions.assertEquals("(y^6-7y)*y", tree5.simplify());
     }
 
     @Test
