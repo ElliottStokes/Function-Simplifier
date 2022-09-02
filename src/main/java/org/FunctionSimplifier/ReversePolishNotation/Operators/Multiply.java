@@ -7,7 +7,7 @@ import org.FunctionSimplifier.SyntaxTree.LeafNode;
 import org.FunctionSimplifier.SyntaxTree.Node;
 import org.FunctionSimplifier.Variable;
 
-public class Multiply implements Operator {
+public class Multiply extends Operator {
     private final int PRIORITY = 3;
 
     public Multiply () { }
@@ -27,11 +27,6 @@ public class Multiply implements Operator {
     }
 
     @Override
-    public Node evaluate(BranchNode leftNode, BranchNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    @Override
     public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
         if (rightNode.toString().equals("("))
             return applyDistributiveLaw(leftNode, rightNode);
@@ -45,18 +40,6 @@ public class Multiply implements Operator {
             return applyDistributiveLaw(rightNode, leftNode);
         else
             return new BranchNode(this, leftNode, rightNode);
-    }
-
-    @Override
-    public Node evaluate(Node leftNode, Node rightNode) {
-        if (leftNode instanceof LeafNode && rightNode instanceof LeafNode)
-            return evaluate((LeafNode) leftNode, (LeafNode) rightNode);
-        else if (leftNode instanceof LeafNode)
-            return evaluate((LeafNode) leftNode, (BranchNode) rightNode);
-        else if (rightNode instanceof LeafNode)
-            return evaluate((BranchNode) leftNode, (LeafNode) rightNode);
-        else
-            return evaluate((BranchNode) leftNode, (BranchNode) rightNode);
     }
 
     private Node applyDistributiveLaw(LeafNode leafNode, BranchNode node) {

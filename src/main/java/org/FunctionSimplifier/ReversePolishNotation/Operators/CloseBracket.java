@@ -4,7 +4,7 @@ import org.FunctionSimplifier.SyntaxTree.BranchNode;
 import org.FunctionSimplifier.SyntaxTree.LeafNode;
 import org.FunctionSimplifier.SyntaxTree.Node;
 
-public class CloseBracket implements Operator {
+public class CloseBracket extends Operator {
     private final int PRIORITY = 99;
 
     public CloseBracket() { }

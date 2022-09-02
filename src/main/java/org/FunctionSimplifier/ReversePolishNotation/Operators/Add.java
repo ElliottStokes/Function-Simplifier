@@ -7,7 +7,7 @@ import org.FunctionSimplifier.SyntaxTree.LeafNode;
 import org.FunctionSimplifier.SyntaxTree.Node;
 import org.FunctionSimplifier.Variable;
 
-public class Add implements Operator {
+public class Add extends Operator {
     private final int PRIORITY = 4;
 
     public Add() { }
@@ -21,34 +21,12 @@ public class Add implements Operator {
         return "+";
     }
 
+    @Override
     public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         Function result = new Addition(leftNode.getVariable(), rightNode.getVariable()).evaluate();
         if (result.isVariable())
             return new LeafNode(new Variable(result.toString()));
         else
             return new BranchNode(this, leftNode, rightNode);
-    }
-
-    public Node evaluate(BranchNode leftNode, BranchNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    public Node evaluate(BranchNode leftNode, LeafNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    public Node evaluate(Node leftNode, Node rightNode) {
-        if (leftNode instanceof LeafNode && rightNode instanceof LeafNode)
-            return evaluate((LeafNode) leftNode, (LeafNode) rightNode);
-        else if (leftNode instanceof LeafNode)
-            return evaluate((LeafNode) leftNode, (BranchNode) rightNode);
-        else if (rightNode instanceof LeafNode)
-            return evaluate((BranchNode) leftNode, (LeafNode) rightNode);
-        else
-            return evaluate((BranchNode) leftNode, (BranchNode) rightNode);
     }
 }

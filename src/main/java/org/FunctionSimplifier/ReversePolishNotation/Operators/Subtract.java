@@ -7,7 +7,7 @@ import org.FunctionSimplifier.SyntaxTree.LeafNode;
 import org.FunctionSimplifier.SyntaxTree.Node;
 import org.FunctionSimplifier.Variable;
 
-public class Subtract implements Operator {
+public class Subtract extends Operator {
     private final int PRIORITY = 4;
 
     public Subtract() { }
@@ -24,33 +24,6 @@ public class Subtract implements Operator {
             return new LeafNode(new Variable(result.toString()));
         else
             return new BranchNode(this, leftNode, rightNode);
-    }
-
-    @Override
-    public Node evaluate(BranchNode leftNode, BranchNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    @Override
-    public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    @Override
-    public Node evaluate(BranchNode leftNode, LeafNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
-    }
-
-    @Override
-    public Node evaluate(Node leftNode, Node rightNode) {
-        if (leftNode instanceof LeafNode && rightNode instanceof LeafNode)
-            return evaluate((LeafNode) leftNode, (LeafNode) rightNode);
-        else if (leftNode instanceof LeafNode)
-            return evaluate((LeafNode) leftNode, (BranchNode) rightNode);
-        else if (rightNode instanceof LeafNode)
-            return evaluate((BranchNode) leftNode, (LeafNode) rightNode);
-        else
-            return evaluate((BranchNode) leftNode, (BranchNode) rightNode);
     }
 
     public String toString() {
