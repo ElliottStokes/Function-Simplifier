@@ -1,7 +1,6 @@
 package org.FunctionSimplifier.ReversePolishNotation.Operators;
 
 import org.FunctionSimplifier.BasicArithmetic.Multiplication;
-import org.FunctionSimplifier.BasicArithmetic.Subtraction;
 import org.FunctionSimplifier.Function;
 import org.FunctionSimplifier.SyntaxTree.BranchNode;
 import org.FunctionSimplifier.SyntaxTree.LeafNode;
@@ -34,12 +33,18 @@ public class Multiply implements Operator {
 
     @Override
     public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
+        if (rightNode.toString().equals("("))
+            return applyDistributiveLaw(leftNode, rightNode);
+        else
+            return new BranchNode(this, leftNode, rightNode);
     }
 
     @Override
     public Node evaluate(BranchNode leftNode, LeafNode rightNode) {
-        return new BranchNode(this, leftNode, rightNode);
+        if (leftNode.toString().equals("("))
+            return applyDistributiveLaw(rightNode, leftNode);
+        else
+            return new BranchNode(this, leftNode, rightNode);
     }
 
     @Override
@@ -52,6 +57,23 @@ public class Multiply implements Operator {
             return evaluate((BranchNode) leftNode, (LeafNode) rightNode);
         else
             return evaluate((BranchNode) leftNode, (BranchNode) rightNode);
+    }
+
+    private Node applyDistributiveLaw(LeafNode leafNode, BranchNode node) {
+        if (node.getLeftNode() instanceof LeafNode)
+            node.setLeftNode(evaluate(leafNode, (LeafNode) node.getLeftNode()));
+        else
+            node.setLeftNode(applyDistributiveLaw(leafNode, (BranchNode) node.getLeftNode()));
+
+        if (node.getRightNode().toString().equals(")"))
+            return node.getLeftNode();
+
+        if (node.getRightNode() instanceof LeafNode)
+            node.setRightNode(evaluate(leafNode, (LeafNode) node.getRightNode()));
+        else
+            node.setRightNode(applyDistributiveLaw(leafNode, (BranchNode) node.getRightNode()));
+
+        return node;
     }
 
     public String toString() {

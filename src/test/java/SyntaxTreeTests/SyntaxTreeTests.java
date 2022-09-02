@@ -1,5 +1,6 @@
 package SyntaxTreeTests;
 
+import com.kitfox.svg.A;
 import org.FunctionSimplifier.SyntaxTree.SyntaxTree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -150,6 +151,30 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree2 = new SyntaxTree("5x / 2");
         Assertions.assertEquals("2.5x", tree2.simplify());
+    }
+
+    @Test
+    public void simplificationDistributiveLawTests() {
+        SyntaxTree tree1 = new SyntaxTree("x * ( x + x^2 + x^3 )");
+        Assertions.assertEquals("x^2+x^3+x^4", tree1.simplify());
+
+        SyntaxTree tree2 = new SyntaxTree("y * ( y + y ) + y * ( 5y - 2y )");
+        Assertions.assertEquals("5y^2", tree2.simplify());
+
+        SyntaxTree tree3 = new SyntaxTree("( x + x^2 + x^3 ) * x");
+        Assertions.assertEquals("x^2+x^3+x^4", tree3.simplify());
+
+        SyntaxTree tree4 = new SyntaxTree("( y + y ) * y + ( 5y - 2y ) * y");
+        Assertions.assertEquals("5y^2", tree4.simplify());
+
+        SyntaxTree tree5 = new SyntaxTree("( x^2 + x^3 + x^4 ) / x");
+        Assertions.assertEquals("x+x^2+x^3", tree5.simplify());
+
+        SyntaxTree tree6 = new SyntaxTree("( y + y ) / y + ( 5y - 2y ) / y");
+        Assertions.assertEquals("5", tree6.simplify());
+
+        SyntaxTree tree7 = new SyntaxTree("x * ( 5x + 7x + ( 3x / x ) )");
+        Assertions.assertEquals("12x^2+3x", tree7.simplify());
     }
 
     @Test
