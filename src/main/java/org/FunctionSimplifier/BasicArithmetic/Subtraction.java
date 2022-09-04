@@ -30,7 +30,13 @@ public class Subtraction extends Function {
     public String toString() { return this.left + " - " + this.right; }
 
     public Function evaluate() {
-        if (!this.left.hasLabel() && !this.right.hasLabel())
+        if (this.left.getConstant() == 0) {
+            this.right.setConstant(this.right.getConstant() * -1);
+            return new Function(this.right);
+        }
+        else if (this.right.getConstant() == 0)
+            return new Function(this.left);
+        else if (!this.left.hasLabel() && !this.right.hasLabel())
             return new Function(this.left.evaluate() - this.right.evaluate());
         else if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent())
             return new Function(new Variable(this.left.getLabel(),

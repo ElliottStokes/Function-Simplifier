@@ -45,7 +45,11 @@ public class Addition extends Function implements Commutation, Arithmetic {
     }
 
     public Function evaluate() {
-        if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent()) {
+        if (this.left.getConstant() == 0)
+            return new Function(this.right);
+        else if (this.right.getConstant() == 0)
+            return new Function(this.left);
+        else if (this.left.getLabel().equals(this.right.getLabel()) && this.left.getExponent() == this.right.getExponent()) {
             return new Function(new Variable(this.left.getLabel(),
                     this.left.getConstant() + this.right.getConstant(),
                     this.right.getExponent()));

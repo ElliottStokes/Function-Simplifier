@@ -27,6 +27,10 @@ public class Division extends Function {
     }
 
     public Function evaluate() {
+        if (this.left.getConstant() == 0)
+            return new Function(this.left);
+        else if (this.right.getConstant() == 0)
+            return null;
         if (this.left.getLabel().equals(this.right.getLabel())) {
             double exponentValue = this.left.getExponent() - this.right.getExponent();
             double constantValue = this.left.getConstant() / this.right.getConstant();
