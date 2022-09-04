@@ -39,6 +39,12 @@ public class Function {
     public boolean isVariable() {
         return this.body instanceof Variable;
     }
+    public Variable getVariable() {
+        if (this.isVariable())
+            return (Variable) this.body;
+        else
+            return null;
+    }
 
     public Object getBody() {
         return this.body;
