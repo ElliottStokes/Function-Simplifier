@@ -14,7 +14,7 @@ public class OpenBracket extends Operator {
     }
 
     @Override
-    public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         return leftNode;
     }
 

@@ -15,7 +15,7 @@ public class Power extends Operator {
     }
 
     @Override
-    public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         Variable leftNodeVariable = leftNode.getVariable();
         return new LeafNode(new Variable(leftNodeVariable.getLabel(),
                 leftNodeVariable.getConstant(),

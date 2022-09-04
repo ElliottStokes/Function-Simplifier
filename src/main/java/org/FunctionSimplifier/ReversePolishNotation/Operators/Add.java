@@ -22,7 +22,7 @@ public class Add extends Operator {
     }
 
     @Override
-    public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         Function result = new Addition(leftNode.getVariable(), rightNode.getVariable()).evaluate();
         if (result.isVariable())
             return new LeafNode(new Variable(result.toString()));

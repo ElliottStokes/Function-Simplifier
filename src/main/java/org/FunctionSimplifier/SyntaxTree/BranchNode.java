@@ -70,4 +70,8 @@ public class BranchNode implements Node {
     public int getPriority() {
         return this.operator.getPriority();
     }
+
+    public Operator getOperator() {
+        return this.operator;
+    }
 }

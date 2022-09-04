@@ -7,19 +7,19 @@ import org.FunctionSimplifier.SyntaxTree.Node;
 public abstract class Operator {
     public abstract int getPriority();
 
-    public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         return new BranchNode(this, leftNode, rightNode);
     }
 
-    public Node evaluate(BranchNode leftNode, BranchNode rightNode) {
+    protected Node evaluate(BranchNode leftNode, BranchNode rightNode) {
         return new BranchNode(this, leftNode, rightNode);
     }
 
-    public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, BranchNode rightNode) {
         return new BranchNode(this, leftNode, rightNode);
     }
 
-    public Node evaluate(BranchNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(BranchNode leftNode, LeafNode rightNode) {
         return new BranchNode(this, leftNode, rightNode);
     }
 

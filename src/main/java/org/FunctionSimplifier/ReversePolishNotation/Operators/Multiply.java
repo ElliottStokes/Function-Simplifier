@@ -18,7 +18,7 @@ public class Multiply extends Operator {
     }
 
     @Override
-    public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         Function result = new Multiplication(leftNode.getVariable(), rightNode.getVariable()).evaluate();
         if (result.isVariable())
             return new LeafNode(new Variable(result.toString()));
@@ -27,16 +27,16 @@ public class Multiply extends Operator {
     }
 
     @Override
-    public Node evaluate(LeafNode leftNode, BranchNode rightNode) {
-        if (rightNode.toString().equals("("))
+    protected Node evaluate(LeafNode leftNode, BranchNode rightNode) {
+        if (rightNode.getOperator() instanceof OpenBracket)
             return applyDistributiveLaw(leftNode, rightNode);
         else
             return new BranchNode(this, leftNode, rightNode);
     }
 
     @Override
-    public Node evaluate(BranchNode leftNode, LeafNode rightNode) {
-        if (leftNode.toString().equals("("))
+    protected Node evaluate(BranchNode leftNode, LeafNode rightNode) {
+        if (leftNode.getOperator() instanceof OpenBracket)
             return applyDistributiveLaw(rightNode, leftNode);
         else
             return new BranchNode(this, leftNode, rightNode);

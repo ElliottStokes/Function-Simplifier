@@ -18,7 +18,7 @@ public class Subtract extends Operator {
     }
 
     @Override
-    public Node evaluate(LeafNode leftNode, LeafNode rightNode) {
+    protected Node evaluate(LeafNode leftNode, LeafNode rightNode) {
         Function result = new Subtraction(leftNode.getVariable(), rightNode.getVariable()).evaluate();
         if (result.isVariable())
             return new LeafNode(new Variable(result.toString()));
