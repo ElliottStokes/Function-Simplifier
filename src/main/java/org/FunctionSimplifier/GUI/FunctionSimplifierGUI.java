@@ -252,7 +252,7 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
                     MutableGraph dotGraphOutput = new Parser().read(dotGraphOutputString);
                     Graphviz.fromGraph(dotGraphOutput).width(400).height(400).render(Format.PNG).toFile(new File("syntaxTreeOutput.png"));
 
-                    inputSyntaxTreeFrame = new JFrame("Input Syntax Binary Tree");
+                    /*inputSyntaxTreeFrame = new JFrame("Input Syntax Binary Tree");
                     inputSyntaxTreeFrame.setSize(420, 440);
                     inputSyntaxTreeFrame.setLocation(325, 0);
                     inputImagePanel = new syntaxTreePanel(inputImageFileName);
@@ -271,7 +271,7 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
                     outputSyntaxTreeFrame.add(outputImagePanel);
 
                     inputSyntaxTreeFrame.setVisible(true);
-                    outputSyntaxTreeFrame.setVisible(true);
+                    outputSyntaxTreeFrame.setVisible(true);*/
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

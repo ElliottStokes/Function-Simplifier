@@ -168,7 +168,12 @@ public class SyntaxTree {
     }
 
     public String simplify() {
-        Node simplifiedTree = simplify_DFT(this.rootNode);
+        Node simplifiedTree = this.rootNode;
+        Node previousTree;
+        do {
+            previousTree = simplifiedTree;
+            simplifiedTree = simplify_DFT(previousTree);
+        } while (!this.inOrderTraversal_R(simplifiedTree).equals(this.inOrderTraversal_R(previousTree)));
         return this.inOrderTraversal_R(simplifiedTree);
     }
 

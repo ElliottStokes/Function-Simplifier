@@ -115,6 +115,12 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree4 = new SyntaxTree("5x + 10");
         Assertions.assertEquals("5x+10", tree4.simplify());
+
+        SyntaxTree tree5 = new SyntaxTree("0 + x");
+        Assertions.assertEquals("x", tree5.simplify());
+
+        SyntaxTree tree6 = new SyntaxTree("x + 0");
+        Assertions.assertEquals("x", tree6.simplify());
     }
 
     @Test
@@ -133,6 +139,12 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree5 = new SyntaxTree("( ( y * y ^ 5 ) - ( 5y + 2y ) ) * ( ( y + y ) - y )");
         Assertions.assertEquals("y^7-7y^2", tree5.simplify());
+
+        SyntaxTree tree6 = new SyntaxTree("0 - x");
+        Assertions.assertEquals("-x", tree6.simplify());
+
+        SyntaxTree tree7 = new SyntaxTree("x - 0");
+        Assertions.assertEquals("x", tree7.simplify());
     }
 
     @Test
@@ -142,6 +154,12 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree2 = new SyntaxTree("x * y");
         Assertions.assertEquals("x*y", tree2.simplify());
+
+        SyntaxTree tree6 = new SyntaxTree("0 * x");
+        Assertions.assertEquals("0", tree6.simplify());
+
+        SyntaxTree tree7 = new SyntaxTree("x * 0");
+        Assertions.assertEquals("0", tree7.simplify());
     }
 
     @Test
@@ -151,6 +169,9 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree2 = new SyntaxTree("5x / 2");
         Assertions.assertEquals("2.5x", tree2.simplify());
+
+        SyntaxTree tree6 = new SyntaxTree("0 / x");
+        Assertions.assertEquals("0", tree6.simplify());
     }
 
     @Test
@@ -175,17 +196,20 @@ public class SyntaxTreeTests {
 
         SyntaxTree tree7 = new SyntaxTree("x * ( 5x + 7x + ( 3x / x ) )");
         Assertions.assertEquals("12x^2+3x", tree7.simplify());
+
+        SyntaxTree tree8 = new SyntaxTree("0 * ( x + y + z )");
+        Assertions.assertEquals("0", tree8.simplify());
     }
 
     @Test
     public void simplificationCombiningLikeTerms() {
         SyntaxTree treeAddition = new SyntaxTree("x + y + x + y");
-        Assertions.assertEquals("2x2y+", treeAddition.simplify());
+        Assertions.assertEquals("2x+2y", treeAddition.simplify());
 
         SyntaxTree treeSubtraction = new SyntaxTree("x - y - x - y");
         Assertions.assertEquals("-2y", treeSubtraction.simplify());
 
         SyntaxTree treeMultiply = new SyntaxTree("x * x * y * y");
-        Assertions.assertEquals("x^2y^2*", treeMultiply.simplify());
+        Assertions.assertEquals("x^2*y^2", treeMultiply.simplify());
     }
 }

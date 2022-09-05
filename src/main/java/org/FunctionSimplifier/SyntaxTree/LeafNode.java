@@ -16,6 +16,9 @@ public class LeafNode implements Node {
     public Variable getVariable() {
         return this.variable;
     }
+    public void setVariable(Variable variable) {
+        this.variable = variable;
+    }
 
     public Node getLeftNode() {
         return null;
