@@ -142,8 +142,9 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
         run.addActionListener(this);
 
         // padding
-        JButton padding1 = new JButton();
-        padding1.setPreferredSize(new Dimension(50, 50));
+        JButton bneg = new JButton("+/-");
+        bneg.setPreferredSize(new Dimension(50, 50));
+        bneg.setBackground(Color.orange);
 
         // add action listeners
         bmultiply.addActionListener(this);
@@ -172,6 +173,7 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
         bcloseBracket.addActionListener(this);
         bdel.addActionListener(this);
         bac.addActionListener(this);
+        bneg.addActionListener(this);
 
         // add elements to panel
         functionPanel.add(bopenBracket);
@@ -197,7 +199,7 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
         functionPanel.add(by);
         functionPanel.add(bz);
         functionPanel.add(b0);
-        functionPanel.add(padding1);
+        functionPanel.add(bneg);
         functionPanel.add(ba);
         functionPanel.add(bb);
         functionPanel.add(bc);
@@ -231,6 +233,12 @@ public class FunctionSimplifierGUI extends JFrame implements ActionListener {
                 if (!this.inputFunction.endsWith(" "))
                     this.inputFunction = this.inputFunction + " ";
                 this.inputFunction = this.inputFunction + s + " ";
+                break;
+            case "+/-":
+                if (this.inputFunction.endsWith("-"))
+                    this.inputFunction = this.inputFunction.substring(0, this.inputFunction.length() - 1);
+                else
+                    this.inputFunction = this.inputFunction + "-";
                 break;
             case "DEL":
                 if (this.inputFunction.endsWith(" "))
