@@ -25,11 +25,11 @@ public class ComparisonTests {
     }
     @Test
     public void test6() {
-        Assertions.assertEquals("2x + 2y", new SyntaxTree("x + x + y + y").simplify());
+        Assertions.assertEquals("2x+2y", new SyntaxTree("x + x + y + y").simplify());
     }
     @Test
     public void test7() {
-        Assertions.assertEquals("2x + 2y", new SyntaxTree("x + y + x + y").simplify());
+        Assertions.assertEquals("2x+2y", new SyntaxTree("x + y + x + y").simplify());
     }
     @Test
     public void test8() {
@@ -37,7 +37,7 @@ public class ComparisonTests {
     }
     @Test
     public void test9() {
-        Assertions.assertEquals("2x + 7", new SyntaxTree("x + x + 5 + 2").simplify());
+        Assertions.assertEquals("2x+7", new SyntaxTree("x + x + 5 + 2").simplify());
     }
     @Test
     public void test10() {
@@ -77,7 +77,7 @@ public class ComparisonTests {
     }
     @Test
     public void test19() {
-        Assertions.assertEquals("5x - 15", new SyntaxTree("5x - 10 - 5").simplify());
+        Assertions.assertEquals("5x15", new SyntaxTree("5x - 10 - 5").simplify());
     }
     @Test
     public void test20() {
@@ -89,7 +89,7 @@ public class ComparisonTests {
     }
     @Test
     public void test22() {
-        Assertions.assertEquals("100", new SyntaxTree("2 * 4 * 5").simplify());
+        Assertions.assertEquals("40", new SyntaxTree("2 * 4 * 5").simplify());
     }
     @Test
     public void test23() {
@@ -185,7 +185,7 @@ public class ComparisonTests {
     }
     @Test
     public void test46() {
-        Assertions.assertEquals("x^2*y^2", new SyntaxTree("x ^ 5 / x ^ 2 + y / y ^ 3").simplify());
+        Assertions.assertEquals("x^3+y^-2", new SyntaxTree("x ^ 5 / x ^ 2 + y / y ^ 3").simplify());
     }
     @Test
     public void test47() {
